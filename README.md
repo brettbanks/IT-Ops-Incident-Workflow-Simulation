@@ -1,86 +1,48 @@
 # IT Ops Incident Workflow Simulation
+End-to-end incident flow:
+- **Detection:** Splunk ingests a log and alerts on suspicious PowerShell execution.
+- **Triage:** Alert routes into **Jira Service Management** as an incident.
+- **SLA Enforcement:** Priority SLAs with **escalation on breach**.
+- **Evidence:** PowerShell script exports an **AD change log (CSV)** and is attached to the ticket.
 
-## 📌 Project Overview
-This project simulates a **real-world IT Operations workflow** by integrating:
-- **Jira Service Management (JSM):** Incident and change tracking with SLAs and automation.
-- **Active Directory (simulated):** User provisioning and access change requests with PowerShell automation.
-- **Splunk:** Security log ingestion and alerting tied to Jira ticket creation.
-- **pfSense:** Firewall logging and evidence generation for network incidents.
+## Repository Structure
+scripts/ # automation
+logs/ # sample logs
+jira/ # incident + SLA screenshots
+splunk/ # ingestion/search/alert screenshots
 
-The goal is to demonstrate how enterprise IT teams **detect, track, and resolve incidents** across multiple systems while maintaining **audit trails and SLA compliance.**
-
----
-
-## ⚙️ Tools & Technologies
-- **Jira Service Management (Cloud)**
-- **Active Directory (Lab Simulation)**
-- **PowerShell, Bash, Python**
-- **Splunk Free**
-- **pfSense Firewall**
-- **Zeek / Sysmon logs**
-
----
-
-## 🧩 Workflow Diagram
-![Workflow Diagram](./images/workflow-diagram.png)  
-*(Replace with your actual diagram export from draw.io or Lucidchart.)*
-
----
-
-## 🚀 Features Implemented
-- **Custom Incident Request Type** in JSM with priority, root cause, and resolution fields.
-- **SLA Tracking & Escalation Rules** (e.g., Critical tickets auto-escalate in 4 hours).
-- **PowerShell AD Automation**: Mock user access report export attached to tickets.
-- **Splunk Security Alert → Jira Ticket**: Auto-created tickets for suspicious PowerShell execution.
-- **Firewall Log Parsing**: pfSense/Bash script that simulates network alerts tied to incident tickets.
-- **Audit Evidence Attachments**: Each incident ticket includes logs or reports as proof.
-
----
-
-## 📂 Repository Contents
-/scripts
-powershell-ad-export.ps1
-firewall-log-parser.py
-sample-zeek-log.txt
-/docs
-IT-Ops-Runbook.pdf
-/images
-workflow-diagram.png
-jira-screenshot.png
-splunk-alert.png
-README.md
-
-yaml
+markdown
 Copy code
 
----
+## Steps to Reproduce
+1) **Jira:** incident form (Service Affected, Priority, Root Cause, Resolution Notes), SLAs (Crit 4h, High 8h, Med 24h, Low 72h), automation on SLA breach to escalate.
+   - ![Critical](/jira/jira-incident-critical.png)
+   - ![High](/jira/jira-incident-high.png) ![Medium](/jira/jira-incident-medium.png) ![Low](/jira/jira-incident-low.png)
+   - ![Breach](/jira/jira-sla-breach.png)
 
-## 📝 Example Ticket Lifecycle
-1. Splunk detects a suspicious PowerShell execution.  
-2. Alert triggers a Jira ticket via email integration.  
-3. Analyst attaches AD audit evidence (PowerShell export).  
-4. Ticket moves through workflow (*Open → In Progress → Resolved*).  
-5. SLA timers ensure escalation if unresolved.  
-6. Final ticket closed with resolution notes and logs attached.  
+2) **PowerShell Evidence:** `scripts/powershell-ad-export.ps1`
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   cd "$env:USERPROFILE\Documents\IT-Ops-Workflow-Sim\scripts"
+   .\powershell-ad-export.ps1
+Attach the CSV to the Jira ticket as audit evidence.
 
----
+Splunk: upload logs/sysmon_sample.log.txt (index=main), search index=main powershell.exe, alert every 1 min (cron */1 * * * *), trigger on results > 0, action Send Email.
 
-## 📖 Documentation
-- [Runbook PDF](./docs/IT-Ops-Runbook.pdf)  
-- [Workflow Diagram](./images/workflow-diagram.png)  
 
----
 
-## 💡 Business Value
-- **Demonstrates end-to-end incident handling.**  
-- **Shows automation + integrations** recruiters expect in IT Ops / Application Admin roles.  
-- **Provides audit-ready documentation** proving attention to compliance and SLA-driven workflows.  
 
----
 
-## 🔗 Portfolio & Contact
-- **Portfolio Website:** [YourWebsiteHere.com](https://brettbanks.site)  
-- **LinkedIn:** [linkedin.com/in/brettbanks1](https://linkedin.com/in/brettbanks1)  
-- **GitHub:** [github.com/Papertrailhack](https://github.com/Papertrailhack)  
 
----
+Why It Matters
+Operational reality (detection → triage → SLA pressure → escalation → resolve), audit evidence stored in-ticket, and automation mindset.
+
+Extend
+Replace email with Splunk HEC + Jira REST, add pfSense logs + parser, publish a 1-page runbook PDF in /docs.
+
+Git Tips
+bash
+Copy code
+git add .
+git commit -m "Update screenshots and docs"
+git push origin main
