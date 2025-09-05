@@ -1,0 +1,16 @@
+# OS junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Logs
+*.log
+*.csv
+
+# Temp files
+*.tmp
+*.swp
+~$*
+
+# Screenshots outside of project
+/Desktop-Archive/
