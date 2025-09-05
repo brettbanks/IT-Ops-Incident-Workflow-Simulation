@@ -1,19 +1,19 @@
 # IT Ops Incident Workflow Simulation
 
-End-to-end demo of a security incident pipeline:
-
-**Splunk detection → Alert → Jira incident → Priority SLAs & escalation → Evidence attached.**
+**Splunk detection → Alert → Jira incident → Priority SLAs & escalation → Evidence attached.**  
+A portfolio-grade, end-to-end simulation that shows you can connect SIEM detections to service management with SLAs and audit evidence.
 
 ---
 
-## What’s here
+## What’s in this repo
 IT-Ops-Workflow-Sim/
-├─ scripts/                      # automation / helper scripts
-│  ├─ powershell-ad-export.ps1   # exports AD change log (CSV)
-│  └─ Fix-HighCPU.ps1            # example health script (placeholder)
+├─ README.md
+├─ scripts/
+│  ├─ powershell-ad-export.ps1     # exports AD-style change log (CSV) for evidence
+│  └─ Fix-HighCPU.ps1              # example health script (placeholder)
 ├─ logs/
-│  └─ sysmon_sample.log.txt      # sample Windows Sysmon event
-├─ splunk/                       # Splunk ingestion, search & alert screenshots
+│  └─ sysmon_sample.log.txt        # sample Sysmon-style event containing powershell.exe
+├─ splunk/                         # ingestion, search & alert evidence
 │  ├─ splunk-login.png
 │  ├─ splunk-upload-source.png
 │  ├─ splunk-upload-review.png
@@ -21,8 +21,9 @@ IT-Ops-Workflow-Sim/
 │  ├─ splunk-alert-config.png
 │  ├─ splunk-alert-triggered.png
 │  ├─ splunk-alert-email.png
-│  └─ splunk-alert-email-alt.png
-└─ jira/                         # Jira incident form, SLAs & breach/escalation
+│  ├─ splunk-alert-email-alt.png
+│  └─ jira-splunk-alert-ticket.png
+└─ jira/                           # incident form, SLAs & breach/escalation
 ├─ jira-incident-critical.png
 ├─ jira-incident-high.png
 ├─ jira-incident-medium.png
@@ -30,97 +31,133 @@ IT-Ops-Workflow-Sim/
 └─ jira-sla-breach.png
 ---
 
-## Prereqs
+## Workflow overview
 
-- **Splunk Cloud/Enterprise** (any trial works)
-- **Jira Service Management** project (ITSM/Service project)
-- **Windows PowerShell** (to run the sample evidence script)
+```mermaid
+flowchart LR
+A[Endpoint/User] --> B[Logs]
+B --> C[Splunk: Search & Alert]
+C -->|Email/Integration| D[Jira Incident]
+D --> E[SLA Timers]
+E -->|Breach| F[Escalate (assign/notify)]
+D --> G[Attach Evidence (AD CSV)]
+G --> H[Resolve / Close]
+Prerequisites
+	•	Splunk (Cloud trial or Enterprise)
+	•	Jira Service Management (ITSM/Service project)
+	•	Windows PowerShell (to run the evidence script)
 
----
+⸻
 
-## Reproduce the flow
+How to reproduce the simulation
 
-### 1) Splunk — ingest + detect + alert
+1) Splunk — ingest, search, alert
+	1.	Ingest the sample log
+	•	Add Data → Upload → select logs/sysmon_sample.log.txt
+	•	Sourcetype: sysmon_sample (custom or auto)
+	•	Index: main
+Refs: splunk/splunk-upload-source.png, splunk/splunk-upload-review.png
+	2.	Verify the event
+	•	Search:index=main sourcetype=sysmon_sample powershell.exe
+	•	You should see Process=powershell.exe and Command=Invoke-WebRequest.
+Ref: splunk/splunk-search-result.png
 
-1. **Upload the sample log**
-   - *Add Data* → **Upload** → select `logs/sysmon_sample.log.txt`
-   - **Source type:** `sysmon_sample`
-   - **Index:** `main`  
-   _Refs: `splunk-upload-source.png`, `splunk-upload-review.png`_
+	3.	Create the alert
+	•	Save the search as an Alert: “Suspicious PowerShell Execution”
+	•	Schedule: every minute (cron */1 * * * *)
+	•	Trigger condition: Number of results > 0
+	•	Trigger mode: For each result
+	•	Action: Send Email (to Jira’s incoming email if configured, otherwise to yourself)
+	•	Enable the alert.
+Refs: splunk/splunk-alert-config.png, splunk/splunk-alert-triggered.png, splunk/splunk-alert-email*.png
 
-2. **Verify the event**
-   - Search:
-     ```spl
-     index="main" sourcetype="sysmon_sample"
-     ```
-   - You should see a line with `Process=powershell.exe` and `Command=Invoke-WebRequest`.  
-   _Ref: `splunk-search-result.png`_
+Note: Some Splunk Cloud tiers don’t show “Real-time” alerts. Scheduling every minute achieves near-real-time behavior for demo purposes.
 
-3. **Create the alert**
-   - Save the search as **Alert**: “Suspicious PowerShell Execution”
-   - **Schedule:** run hourly (or cron `*/5 * * * *` for quick testing)
-   - **Trigger condition:** `Number of results > 0`
-   - **Actions:** Send email to yourself
-   - Enable the alert  
-   _Refs: `splunk-alert-config.png`, `splunk-alert-email*.png`, `splunk-alert-triggered.png`_
+⸻
 
-> Tip: Some Splunk Cloud tiers don’t show “Real-time” alerts. Use a short cron schedule for fast feedback.
+2) Jira — incident, SLAs, escalation
+	1.	Incident request type
+	•	Fields: Summary, Description, Service Affected, Priority, Root Cause, Resolution Notes
+Refs: jira/jira-incident-*.png
+	2.	Priority SLAs (example targets)
+	•	Highest: 4h (for demos, temporarily set 1m to force a breach)
+	•	High: 24h
+	•	Medium: 36h
+	•	Low: 48h
+	•	Special rule: Critical Incident Resolution SLA (used by escalation)
+Refs: jira/jira-incident-*.png
+	3.	Escalation on breach
+	•	Automation rule: When SLA threshold is breached → SLA: Critical Incident Resolution SLA
+	•	If Priority = Highest
+	•	Then Assign to Tier-2 Analyst (and/or comment/notify channel)
+Ref: jira/jira-sla-breach.png
 
----
+⸻
 
-### 2) Jira — incident, SLAs, escalation
+3) Evidence script (PowerShell)
 
-1. **Incident request type**
-   - Fields: Summary, Description, **Service affected**, **Priority**, **Root cause**, **Resolution notes**  
-   _Ref: `jira-incident-*.png`_
-
-2. **Priority SLAs** (example targets)
-   - Highest: **4h** (for demo, you can temporarily set **1m** to force a breach)
-   - High: **24h**
-   - Medium: **36h**
-   - Low: **48h**
-   - “Critical Incident Resolution SLA”: **4h** (special rule you’ll use for escalation)  
-   _Ref: `jira-incident-*.png`_
-
-3. **Escalation on breach**
-   - Automation rule: **When:** *SLA threshold breached* → **SLA:** *Critical Incident Resolution SLA* → *breached*
-   - **Condition:** Priority equals *Highest* (or your critical class)
-   - **Then:** Assign to *Tier-2 Analyst* (and/or add comment, notify)  
-   _Ref: `jira-sla-breach.png`_
-
----
-
-### 3) Evidence script (optional)
-
-Use the sample PowerShell script to export a simple “AD change log” CSV and attach it to the Jira ticket.
-
-```powershell
-# one-session bypass for scripts
+Export a simple “AD change log” CSV and attach it to the incident.
+# (Optional) allow scripts for this session only
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
-# run from repo root or via full path
-.\scripts\powershell-ad-export.ps1
-	•	Default export path in the script is C:\IT-Ops-Lab\AD_ChangeLog.csv.
-	•	Create the folder or change $ExportPath in the script, then re-run.
-	•	Attach the CSV to your Jira incident as evidence.
+# Run from the repo root or with full path
+cd "$env:USERPROFILE\Documents\IT-Ops-Workflow-Sim\scripts"
+.\powershell-ad-export.ps1
+•	The script writes a CSV (default path inside the script is C:\IT-Ops-Lab\AD_ChangeLog.csv).
+	•	Create the folder or edit $ExportPath in the script.
+	•	Attach the CSV to your Jira incident as audit evidence.
 
 ⸻
 
-What “success” looks like
-	•	Splunk shows the sample event and the alert fires (email received).
-	•	Jira incident is created/updated; SLAs display per priority.
-	•	If you set a tiny target (e.g., 1m) you can demonstrate a breach and see the automation escalate.
-	•	The evidence CSV from the PowerShell script is attached to the ticket.
+Screenshot gallery (embedded)
+
+Splunk
+<p><img src="splunk/splunk-login.png" width="840"></p>
+<p><img src="splunk/splunk-upload-source.png" width="840"></p>
+<p><img src="splunk/splunk-upload-review.png" width="840"></p>
+<p><img src="splunk/splunk-search-result.png" width="840"></p>
+<p><img src="splunk/splunk-alert-config.png" width="840"></p>
+<p><img src="splunk/splunk-alert-triggered.png" width="840"></p>
+<p>
+  <img src="splunk/splunk-alert-email.png" width="840"><br>
+  <img src="splunk/splunk-alert-email-alt.png" width="840">
+</p>
+<p><img src="splunk/jira-splunk-alert-ticket.png" width="840"></p>
+Jira
+<p><img src="jira/jira-incident-critical.png" width="840"></p>
+<p><img src="jira/jira-incident-high.png" width="840"></p>
+<p><img src="jira/jira-incident-medium.png" width="840"></p>
+<p><img src="jira/jira-incident-low.png" width="840"></p>
+<p><img src="jira/jira-sla-breach.png" width="840"></p>
+
+Success criteria
+	•	Splunk ingests the sample log and the alert fires.
+	•	Jira incident displays priority SLAs and an escalation occurs on breach.
+	•	Evidence CSV from PowerShell is attached in the ticket.
 
 ⸻
 
-Common hiccups
-	•	Splunk real-time not available: use a frequent scheduled alert instead.
-	•	PowerShell execution policy blocks script: use the one-session bypass shown above.
-	•	CSV path missing: create C:\IT-Ops-Lab\ or update $ExportPath in the script.
+Troubleshooting
+	•	No “Real-time” alerts in Splunk: use a frequent Scheduled alert (cron */1 * * * *).
+	•	PowerShell blocked: use the session-only bypass shown above.
+	•	CSV path missing: create C:\IT-Ops-Lab\ or change $ExportPath and rerun.
+	•	Images don’t render in README: ensure paths/case match exactly (e.g., splunk/splunk-login.png).
 
 ⸻
 
-License / reuse
+Extend the lab
+	•	Replace email with Splunk HEC + Jira REST for fully automated ticket creation.
+	•	Add firewall (pfSense) logs and parsing; attach results to incidents.
+	•	Publish a one-page runbook PDF in /docs for non-technical stakeholders.
+	•	Track MTTR/SLA compliance and visualize in a dashboard.
 
-This repository is for personal portfolio/demo use. Feel free to adapt the structure and the steps for your own lab or interview walkthroughs.
+⸻
+
+Git quick commands
+git add .
+git commit -m "Update screenshots and docs"
+git push origin main
+
+License
+
+MIT (or your preferred license).
