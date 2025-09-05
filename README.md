@@ -27,7 +27,7 @@ IT-Ops-Workflow-Sim/
 └─ jira-sla-breach.png
 ## Workflow overview
 
-```mermaid
+mermaid
 flowchart LR
 A[Endpoint/User] --> B[Logs]
 B --> C[Splunk: Search & Alert]
@@ -43,7 +43,7 @@ Prerequisites
 ---
 
 ### 4/7 — How to reproduce (Splunk)
-```markdown
+
 
 ## How to reproduce the simulation
 
@@ -52,7 +52,7 @@ Prerequisites
    Sourcetype: `sysmon_sample`, Index: `main`  
    _Refs:_ `splunk/splunk-upload-source.png`, `splunk/splunk-upload-review.png`
 2. **Verify:** Search
-```spl
+
 index=main sourcetype=sysmon_sample powershell.exe
 Ref: splunk/splunk-search-result.png
 3. Alert: Save search as alert “Suspicious PowerShell Execution”
@@ -63,7 +63,7 @@ Tip: If “Real-time” isn’t available, a 1-minute schedule is fine for demo.
 ---
 
 ### 5/7 — Jira steps
-```markdown
+markdown
 ### 2) Jira — incident, SLAs, escalation
 1. **Incident request type** with fields: Summary, Description, **Service Affected**, **Priority**, **Root Cause**, **Resolution Notes**.  
    _Refs:_ `jira/jira-incident-*.png`
@@ -76,7 +76,7 @@ Tip: If “Real-time” isn’t available, a 1-minute schedule is fine for demo.
 ### 3) Evidence script (PowerShell)
 Export an “AD change log” CSV and attach to the incident.
 
-```powershell
+powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 cd "$env:USERPROFILE\Documents\IT-Ops-Workflow-Sim\scripts"
 .\powershell-ad-export.ps1
@@ -94,7 +94,7 @@ Troubleshooting
 ---
 
 ### 7/7 — **Images that render** (paste these exact lines)
-```markdown
+markdown
 ## Screenshot gallery
 
 ### Splunk
@@ -118,7 +118,7 @@ Troubleshooting
 ---
 
 ## Git quick commands
-```bash
+bash
 git add .
 git commit -m "Update README and screenshots"
 git push origin main
