@@ -5,16 +5,15 @@ End-to-end incident flow to demonstrate practical **IT Ops & SecOps skills**.
 This project simulates detection, ticketing, SLA tracking, escalation, and evidence handling using free tools.  
 
 ---
+## 🎯 Why This Project Matters
+This project mirrors enterprise SOC workflows using free tools.
+It demonstrates:
+- Threat detection in Splunk
+- Automated incident creation in Jira
+- SLA enforcement & escalation handling
+- Evidence export for compliance
 
-## 💡 Why This Matters  
-Hiring managers don’t want theory — they want proof. This project demonstrates:  
-
-- ✅ **Log ingestion & detection** with Splunk Sysmon → suspicious PowerShell  
-- ✅ **Incident triage & tracking** with Jira Service Management + SLA timers  
-- ✅ **Escalation enforcement** with SLA breach rules  
-- ✅ **Evidence generation** using PowerShell AD exports for compliance  
-
-This isn’t just a demo — it mirrors how **SOC and IT Ops teams actually run** in enterprise environments.  
+Recruiters: this is the workflow I can bring to your SOC team.  
 
 ---
 
