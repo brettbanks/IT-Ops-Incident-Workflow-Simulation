@@ -1,11 +1,11 @@
 
-# ⚡ IT Ops Incident Workflow Simulation  
+#  IT Ops Incident Workflow Simulation  
 
 End-to-end incident flow to demonstrate practical **IT Ops & SecOps skills**.  
 This project simulates detection, ticketing, SLA tracking, escalation, and evidence handling using free tools.  
 
 ---
-## 🎯 Why This Project Matters
+##  Why This Project Matters
 This project mirrors enterprise SOC workflows using free tools.
 It demonstrates:
 - Threat detection in Splunk
@@ -17,24 +17,24 @@ Recruiters: this is the workflow I can bring to your SOC team.
 
 ---
 
-## 🚀 What You’ll Build  
+##  What You’ll Build  
 **Detection → Ticketing → SLA → Escalation → Evidence**  
 
 ---
 
-## ⚙️ Prerequisites  
+## ⚙ Prerequisites  
 - Splunk Cloud (trial or dev instance)  
 - Jira Service Management (free plan is fine)  
 - Windows PowerShell  
 
 ---
 
-## 📸 Demo Screenshot  
+##  Demo Screenshot  
 ![Splunk Search Result](splunk/splunk-search-result.png)  
 
 ---
 
-## 📑 Table of Contents  
+##  Table of Contents  
 - [Repository Structure](#-repository-structure)  
 - [Step-by-Step](#-step-by-step)  
   - [Splunk](#1-splunk--ingest-search-alert)  
@@ -47,7 +47,7 @@ Recruiters: this is the workflow I can bring to your SOC team.
 
 ---
 
-## 📂 Repository Structure  
+##  Repository Structure  
 ```text
 IT-Ops-Incident-Workflow-Simulation/
 ├── scripts/                # automation
@@ -75,7 +75,7 @@ IT-Ops-Incident-Workflow-Simulation/
 
 ---
 
-## 📝 Step-by-Step  
+##  Step-by-Step  
 
 ### 1) Splunk — Ingest, Search, Alert  
 **Upload sample log:**  
@@ -124,7 +124,7 @@ Attach exported `AD_ChangeLog.csv` to Jira ticket.
 
 ---
 
-## 📊 SLA Targets  
+##  SLA Targets  
 | Priority | First Response | Resolution |  
 |----------|----------------|------------|  
 | Highest  | 2h             | 4h         |  
@@ -134,7 +134,7 @@ Attach exported `AD_ChangeLog.csv` to Jira ticket.
 
 ---
 
-## 🧩 SPL Used  
+##  SPL Used  
 ```spl
 index=main sourcetype=sysmon_sample (Process="powershell.exe" OR Command="*Invoke-WebRequest*")
 | table _time host User Process Command
@@ -143,7 +143,7 @@ index=main sourcetype=sysmon_sample (Process="powershell.exe" OR Command="*Invok
 
 ---
 
-## 🛠️ Git Quick Commands  
+## 🛠 Git Quick Commands  
 ```bash
 git add .
 git commit -m "Update README with screenshots"
