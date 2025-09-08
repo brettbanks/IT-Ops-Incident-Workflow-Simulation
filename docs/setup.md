@@ -1,4 +1,4 @@
-# 🛠️ Setup Instructions
+# 🛠 Setup Instructions
 
 Reproducibility is critical in demonstrating engineering workflows.  
 This guide walks through setting up the IT Ops Incident Workflow Simulation from scratch.
@@ -73,7 +73,7 @@ This guide walks through setting up the IT Ops Incident Workflow Simulation from
 
 ---
 
-## ✅ Summary
+##  Summary
 
 After completing this setup, you’ll have a working simulation of:
 
