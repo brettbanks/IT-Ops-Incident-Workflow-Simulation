@@ -1,12 +1,12 @@
 
-# ⚡ IT Ops Incident Workflow Simulation  
+#  IT Ops Incident Workflow Simulation  
 
 End-to-end incident flow to demonstrate practical **IT Ops & SecOps skills**.  
 This project simulates detection, ticketing, SLA tracking, escalation, and evidence handling using free tools.  
 
 ---
 
-## 💡 Why This Matters  
+##  Why This Matters  
 Hiring managers don’t want theory — they want proof. This project demonstrates:  
 
 - ✅ **Log ingestion & detection** with Splunk Sysmon → suspicious PowerShell  
