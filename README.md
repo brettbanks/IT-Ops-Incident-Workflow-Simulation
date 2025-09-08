@@ -9,7 +9,7 @@ This project simulates detection, ticketing, SLA tracking, escalation, and evide
 
 ---
 
-## 🎯 Why This Project Matters
+##  Why This Project Matters
 This project demonstrates the full lifecycle of IT Ops + SecOps workflows:
 - **Detection** of malicious PowerShell activity
 - **Incident tracking** with SLA enforcement
@@ -23,7 +23,7 @@ These are the exact workflows a **SOC Analyst / Security Engineer** executes in 
 ![SOC Workflow](docs/diagram.png)
 
 
-## 🚀 What You’ll Build  
+##  What You’ll Build  
 **Detection → Ticketing → SLA → Escalation → Evidence**  
 
 ---
@@ -81,7 +81,7 @@ IT-Ops-Incident-Workflow-Simulation/
 
 ---
 
-## 📝 Step-by-Step  
+##  Step-by-Step  
 
 ### 1) Splunk — Ingest, Search, Alert  
 **Upload sample log:**  
