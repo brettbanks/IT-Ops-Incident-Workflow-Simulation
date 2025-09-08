@@ -20,12 +20,16 @@ Recruiters: this is the workflow I can bring to your SOC team.
 ##  What You’ll Build  
 **Detection → Ticketing → SLA → Escalation → Evidence**  
 
+### Visual Version
+![Advanced SOC Workflow](docs/advanced_workflow.png)
 ---
 
 ## ⚙ Prerequisites  
 - Splunk Cloud (trial or dev instance)  
 - Jira Service Management (free plan is fine)  
-- Windows PowerShell  
+- Windows PowerShell
+  📖 [Setup Instructions](docs/setup.md)
+
 
 ---
 
