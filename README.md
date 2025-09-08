@@ -21,7 +21,7 @@ Recruiters: this is the workflow I can bring to your SOC team.
 **Detection → Ticketing → SLA → Escalation → Evidence**  
 
 ### Visual Version
-![Advanced SOC Workflow](docs/advanced_workflow.png)
+![Advanced SOC Workflow](docs/workflow.png)
 ---
 
 ## ⚙ Prerequisites  
