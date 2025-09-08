@@ -17,6 +17,9 @@ Hiring managers don’t want theory — they want proof. This project demonstrat
 This isn’t just a demo — it mirrors how **SOC and IT Ops teams actually run** in enterprise environments.  
 
 ---
+## 🖼️ Workflow Diagram
+![SOC Workflow](docs/diagram.png)
+
 
 ## 🚀 What You’ll Build  
 **Detection → Ticketing → SLA → Escalation → Evidence**  
