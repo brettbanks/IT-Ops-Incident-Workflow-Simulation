@@ -6,15 +6,14 @@ This project simulates detection, ticketing, SLA tracking, escalation, and evide
 
 ---
 
-##  Why This Matters  
-Hiring managers don’t want theory — they want proof. This project demonstrates:  
+## 🎯 Why This Project Matters
+This project demonstrates the full lifecycle of IT Ops + SecOps workflows:
+- **Detection** of malicious PowerShell activity
+- **Incident tracking** with SLA enforcement
+- **Escalation handling** when timers breach
+- **Evidence export** for compliance/audit
 
-- ✅ **Log ingestion & detection** with Splunk Sysmon → suspicious PowerShell  
-- ✅ **Incident triage & tracking** with Jira Service Management + SLA timers  
-- ✅ **Escalation enforcement** with SLA breach rules  
-- ✅ **Evidence generation** using PowerShell AD exports for compliance  
-
-This isn’t just a demo — it mirrors how **SOC and IT Ops teams actually run** in enterprise environments.  
+These are the exact workflows a **SOC Analyst / Security Engineer** executes in enterprise environments. 
 
 ---
 ## 🖼️ Workflow Diagram
